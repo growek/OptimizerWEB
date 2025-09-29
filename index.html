@@ -1,231 +1,764 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Optimizer Cheats – Minecraft</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimizer Cheats – Minecraft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Import czcionki Poppins */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow-x: hidden; }
+        /* Ustawienia podstawowe i tło z animacją */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; min-height: 100vh; }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      color: #fff;
-      position: relative;
-      overflow-x: hidden;
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+            background: #111; /* Fallback kolor */
+        }
 
-      background: url('img/OptimizerMainBG.png') repeat-x top;
-      background-size: auto 100%;
-      animation: scrollBG 30s linear infinite;
-    }
+        /* Warstwa tła z animacją */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: url('img/OptimizerMainBG.png') repeat-x center center;
+            background-size: auto 100vh; 
+            animation: scrollBG 60s linear infinite; 
+            background-color: #1a1a1a;
+        }
 
-    @keyframes scrollBG {
-      0% { background-position-x: 0; }
-      100% { background-position-x: 1000px; }
-    }
+        @keyframes scrollBG {
+            0% { background-position-x: 0; }
+            100% { background-position-x: -1000px; } 
+        }
 
-    nav {
-      width: 100%;
-      padding: 10px 50px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(0,0,0,0.4);
-      position: fixed;
-      top: 0;
-      left: 0;
-      backdrop-filter: blur(6px);
-      z-index: 100;
-    }
+        /* Nawigacja (bez zmian w centrowaniu, jest już fixed) */
+        nav {
+            width: 100%;
+            padding: 10px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.6); 
+            position: fixed;
+            top: 0;
+            left: 0;
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
 
-    .left {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      z-index: 101;
-    }
+        .left { display: flex; align-items: center; gap: 10px; z-index: 101; }
+        .logo { 
+            width: 40px; height: 40px; 
+            background: #c77dff; 
+            border-radius: 8px; 
+            box-shadow: 0 0 10px #7b2cbf; 
+            display: flex; justify-content: center; align-items: center; 
+            font-weight: 900; font-size: 1.5rem;
+        }
+        .brand { font-weight: 800; font-size: 1.25rem; color: #fff; text-transform: uppercase; }
 
-    .logo { width: 50px; height: 50px; background: #fff; border-radius: 8px; }
-    .brand { font-weight: 700; font-size: 1rem; color: #fff; }
+        .menu {
+            display: flex;
+            gap: 55px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 101;
+        } 
 
-    .menu {
-      display: flex;
-      gap: 55px;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 101;
-    } 
+        .menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.3s, transform 0.2s, text-shadow 0.3s;
+            text-shadow: 0 0 5px rgba(123, 44, 191, 0.5);
+        }
+        .menu a:hover, .menu a.text-\[\#c77dff\] { color: #c77dff; transform: scale(1.05); text-shadow: 0 0 10px #c77dff; }
 
-    .menu a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.5rem;
-      transition: color 0.3s;
-    }
-    .menu a:hover { color: #c77dff; }
+        /* Przycisk Discord (bez zmian) */
+        .discord-btn {
+            background: #5865F2; 
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s, transform 0.2s;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+        }
+        .discord-btn:hover {
+            background: #4e5ad0;
+            transform: translateY(-2px);
+        }
+        .discord-btn img {
+            width: 24px; 
+            height: 24px;
+            border-radius: 50%;
+        }
+        .discord-btn .user-avatar {
+            width: 30px; 
+            height: 30px;
+        }
 
-    .hero {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 160px 20px 80px;
-      position: relative;
-      z-index: 101;
-    }
-    h1 { font-size: 3rem; margin-bottom: 15px; }
-    p { font-size: 1.2rem; margin-bottom: 25px; color: #d0d0d0; }
+        /* Panel użytkownika (Dropdown - bez zmian) */
+        .user-panel {
+            position: fixed;
+            top: 65px;
+            right: 20px;
+            background: #1e1e1e;
+            border: 1px solid #7b2cbf;
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            width: 200px;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
+        }
+        .user-panel.show { display: flex; }
+        .user-panel .user-avatar { width: 50px; height: 50px; border-radius: 50%; margin-bottom: 5px; align-self: center; }
+        .user-panel .user-name { font-weight: 700; text-align: center; color: #c77dff; margin-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
+        .user-panel button { padding: 8px; border-radius: 6px; font-weight: 600; transition: background 0.2s; border: none; cursor: pointer; }
+        .user-panel .settings-btn { background: #333; color: #fff; }
+        .user-panel .settings-btn:hover { background: #555; }
+        .user-panel .logout-btn { background: #dc3545; color: #fff; }
+        .user-panel .logout-btn:hover { background: #c82333; }
 
-    .btn {
-      display: inline-block;
-      padding: 12px 28px;
-      font-size: 1.2rem;
-      color: #fff;
-      background: #7b2cbf;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-    .btn:hover { background: #9d4edd; }
+        /* Główne sekcje contentu */
+        .content-container {
+            flex: 1;
+            width: 100%;
+            padding: 100px 20px 40px; 
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: calc(100vh - 80px); 
+        }
+        
+        .content-section {
+            width: 100%;
+            max-width: 900px; 
+            padding: 40px 30px;
+            background: rgba(0, 0, 0, 0.85); 
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            opacity: 0;
+            position: absolute; 
+            top: 100px; 
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            display: none;
+            min-height: 500px;
+            border: 1px solid rgba(123, 44, 191, 0.3);
+            
+            /* KLUCZ: Wszystkie wbudowane elementy (tekst, przyciski inline-block) są centrowane */
+            text-align: center; 
+        }
+        
+        .content-section.active {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            display: block;
+            position: relative; 
+        }
 
-    /* Panel użytkownika */
-    .user-panel {
-      position: absolute;
-      top: 70px;
-      right: 50px;
-      width: 220px;
-      background: rgba(0,0,0,0.8);
-      border-radius: 12px;
-      padding: 15px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      z-index: 102;
-    }
-    .user-panel.show { display: flex; }
-    .user-panel .user-avatar { width: 70px; height: 70px; border-radius: 50%; }
-    .user-panel .user-name { font-weight: 600; color: #fff; text-align: center; }
-    .user-panel button {
-      width: 100%;
-      padding: 8px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .user-panel .settings-btn { background: #7b2cbf; color: #fff; }
-    .user-panel .logout-btn { background: #f03e3e; color: #fff; }
+        /* Styl dla wszystkich głównych przycisków */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #c77dff, #7b2cbf);
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(123, 44, 191, 0.5);
+            cursor: pointer;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(123, 44, 191, 0.7);
+            filter: brightness(1.1);
+        }
+        .btn-secondary {
+            background: #333;
+            box-shadow: none;
+        }
+        .btn-secondary:hover {
+            background: #555;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
+            transform: translateY(-1px);
+        }
 
-    .discord-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #5865F2;
-      color: #fff;
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 12px 20px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s;
-      z-index: 101;
-    }
-    .discord-btn:hover { background: #4752c4; }
-    .discord-btn img { width: 25px; height: 25px; filter: invert(1); }
-  </style>
+        /* Sekcja Hero (Strona główna - już poprawnie centrowana) */
+        #home-section h1 { 
+            font-size: clamp(3rem, 6vw, 5rem); 
+            margin-bottom: 15px; 
+            font-weight: 900;
+            text-shadow: 0 0 20px #7b2cbf;
+        }
+        #home-section p { font-size: clamp(1rem, 2vw, 1.25rem); margin-bottom: 35px; color: #b8b8b8; }
+
+
+        /* Sekcja FAQ (Accordion) */
+        .faq-title { font-size: 2rem; font-weight: 700; color: #c77dff; margin-bottom: 30px; text-align: center; }
+        
+        /* KLUCZOWA POPRAWKA FAQ: Ograniczenie szerokości i centrowanie bloku */
+        .accordion-container { 
+            max-width: 700px;
+            margin: 0 auto; /* Centruje cały blok akordeonu */
+            text-align: left; /* Wewnętrzne treści i nagłówki akordeonu do lewej dla czytelności */
+        } 
+        
+        .accordion-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            margin-bottom: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .accordion-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            transition: background 0.2s;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .accordion-header:hover { background: rgba(123, 44, 191, 0.2); }
+        .accordion-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+            color: #c77dff;
+        }
+        .accordion-item.open .accordion-icon {
+            transform: rotate(45deg);
+        }
+        .accordion-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            color: #b8b8b8;
+            font-size: 0.95rem;
+            background: rgba(0, 0, 0, 0.6);
+            text-align: left; 
+        }
+        .accordion-item.open .accordion-content {
+            max-height: 500px;
+            padding: 15px 20px;
+        }
+
+        /* Sekcja Zakup (Pricing) */
+        .purchase-title { font-size: 2rem; font-weight: 700; color: #c77dff; margin-bottom: 30px; text-align: center; }
+        
+        /* KLUCZOWA POPRAWKA ZAKUP: Użycie Flexbox dla centrowania grida */
+        #purchase-section .content-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centrowanie wszystkich elementów blokowych w sekcji (nagłówek, grid) */
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+            width: 100%; /* Używa 100% szerokości .content-section (900px) */
+            justify-content: center; /* Centruje grid items, jeśli jest ich mniej niż 3 */
+        }
+        .price-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .price-card:hover {
+            border-color: #7b2cbf;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(123, 44, 191, 0.4);
+        }
+        .price-card h3 { font-size: 1.8rem; font-weight: 700; color: #c77dff; margin-bottom: 10px; }
+        .price-card .price { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; }
+        .price-card .price small { font-size: 1rem; color: #b8b8b8; font-weight: 400; }
+        
+        /* Lista cech w karcie cenowej */
+        .price-card ul { 
+            list-style: none; 
+            text-align: left; 
+            margin-bottom: 30px; 
+            padding-left: 0; 
+            max-width: 280px; 
+            margin: 0 auto 30px auto; /* Centrowanie listy cech */
+        }
+
+        .price-card li { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .price-card li::before { content: '✓'; color: #4CAF50; font-weight: 700; }
+
+        /* Modal Styling (bez zmian) */
+        .custom-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .custom-modal-backdrop.show { display: flex; }
+        .custom-modal {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 50px rgba(123, 44, 191, 0.5);
+            border: 1px solid #7b2cbf;
+        }
+        #modalTitle { font-size: 1.5rem; font-weight: 700; color: #c77dff; margin-bottom: 10px; }
+        #modalMessage { color: #ccc; margin-bottom: 20px; }
+        .modal-buttons button { padding: 10px 20px; border-radius: 8px; margin: 0 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+        .modal-ok, .modal-confirm { background: #c77dff; color: #1a1a1a; }
+        .modal-ok:hover, .modal-confirm:hover { background: #a967e6; transform: translateY(-1px); }
+        .modal-cancel { background: #333; color: #fff; }
+        .modal-cancel:hover { background: #555; transform: translateY(-1px); }
+        
+        /* Responsywność */
+        @media (max-width: 900px) {
+            .menu { display: none; } 
+        }
+        @media (max-width: 600px) {
+            nav { padding: 10px 20px; }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <nav>
-    <div class="left">
-      <div class="logo"></div>
-      <div class="brand">Optimizer</div>
+    <nav>
+        <div class="left">
+            <div class="logo">O</div>
+            <div class="brand">Optimizer</div>
+        </div>
+
+        <div class="menu">
+            <a href="#home" data-section-id="home-section">Strona główna</a>
+            <a href="#purchase" data-section-id="purchase-section">Zakup</a>
+            <a href="#faq" data-section-id="faq-section">FAQ</a>
+        </div>
+    </nav>
+
+    <main class="content-container">
+        
+        <!-- SEKCJA 1: STRONA GŁÓWNA (HOME) -->
+        <section id="home-section" class="content-section active">
+            <h1><b>Optimizer</b></h1>
+            <p>Jedne z tańszych i najlepszych Cheat Clientów do Minecraft, zaprojektowane, aby dać Ci przewagę w każdej grze.</p>
+            <a href="#purchase" data-section-id="purchase-section" class="btn">Zobacz Oferte</a>
+        </section>
+
+        <!-- SEKCJA 2: ZAKUP (PURCHASE) - Używa Flexbox do centrowania grida -->
+        <section id="purchase-section" class="content-section">
+            <h2 class="purchase-title">Wybierz Swój Plan Optymalizacji</h2>
+            <div class="pricing-grid">
+                
+                <!-- Karta 1: TRIAL -->
+                <div class="price-card">
+                    <h3>TEST (Trial)</h3>
+                    <p class="price">0 zł<small>/ 3 dni</small></p>
+                    <ul>
+                        <li><span class="text-green-400">✓</span> Ograniczony zestaw modułów</li>
+                        <li><span class="text-green-400">✓</span> Podstawowe wsparcie</li>
+                        <li><span class="text-red-400">✕</span> Aktualizacje priorytetowe</li>
+                        <li><span class="text-red-400">✕</span> Dostęp do kanałów VIP</li>
+                    </ul>
+                    <a href="#purchase" data-section-id="purchase-section" class="btn btn-secondary">Wypróbuj teraz</a>
+                </div>
+
+                <!-- Karta 2: PREMIUM (Najpopularniejszy) -->
+                <div class="price-card" style="border-color: #c77dff;">
+                    <h3>PREMIUM</h3>
+                    <p class="price">39 zł<small>/ Miesiąc</small></p>
+                    <ul>
+                        <li><span class="text-green-400">✓</span> Pełny zestaw 50+ modułów</li>
+                        <li><span class="text-green-400">✓</span> Wsparcie 24/7</li>
+                        <li><span class="text-green-400">✓</span> Aktualizacje priorytetowe</li>
+                        <li><span class="text-red-400">✕</span> Dożywotni dostęp</li>
+                    </ul>
+                    <a href="#purchase" data-section-id="purchase-section" class="btn">Kup Miesiąc</a>
+                </div>
+
+                <!-- Karta 3: LIFETIME -->
+                <div class="price-card">
+                    <h3>DOŻYWOTNI (Lifetime)</h3>
+                    <p class="price">299 zł<small>/ Raz</small></p>
+                    <ul>
+                        <li><span class="text-green-400">✓</span> Pełny zestaw 50+ modułów</li>
+                        <li><span class="text-green-400">✓</span> Wsparcie 24/7</li>
+                        <li><span class="text-green-400">✓</span> Aktualizacje priorytetowe</li>
+                        <li><span class="text-green-400">✓</span> Dożywotni dostęp i VIP</li>
+                    </ul>
+                    <a href="#purchase" data-section-id="purchase-section" class="btn">Kup Dożywotni</a>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SEKCJA 3: FAQ - Używa margin: 0 auto dla kontenera akordeonu -->
+        <section id="faq-section" class="content-section">
+            <h2 class="faq-title">Najczęściej Zadawane Pytania (FAQ)</h2>
+            <div class="accordion-container">
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Czy Optimizer jest bezpieczny i niewykrywalny?</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Zawsze dokładamy wszelkich starań, aby nasz klient był maksymalnie bezpieczny i dyskretny. Regularnie testujemy i aktualizujemy nasze moduły, aby zminimalizować ryzyko wykrycia przez systemy anty-cheat (np. na serwerach Minecraft), jednak zawsze należy używać klienta z rozwagą. **Pamiętaj, że żaden klient nie gwarantuje $100$% niewykrywalności na każdym serwerze. To Ty jako użytkownik musisz dostosować ustawienia do serwera, na którym grasz, aby uniknąć bana.** Nasze algorytmy są jednymi z najbardziej zaawansowanych na rynku, ale ostateczna odpowiedzialność leży po stronie gracza. Zalecamy używanie trybu 'Ghost' na serwerach z restrykcyjnym anty-cheatem.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Na jakich wersjach Minecraft działa Optimizer?</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Optimizer został zaprojektowany głównie dla wersji Minecraft $1.8.9$ (PvP) oraz $1.16.5$. Pracujemy nad rozszerzeniem wsparcia dla nowszych wersji, takich jak $1.20$. Szczegóły dotyczące kompatybilności zawsze znajdziesz na naszej stronie Zakup. Wersja $1.8.9$ otrzymuje najwięcej aktualizacji i ma najszerszą gamę dostępnych modułów. **Wsparcie dla wersji $1.20$ jest obecnie w fazie beta**, a pełna stabilna wersja zostanie udostępniona w najbliższych miesiącach dla wszystkich posiadaczy kont Premium i Lifetime.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Jak wygląda proces zakupu i aktywacji?</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Po wybraniu planu i dokonaniu płatności (akceptujemy m.in. PayPal, Przelewy24), otrzymasz klucz aktywacyjny na podany adres e-mail. Klucz należy wprowadzić w dedykowanym panelu klienta, który pobierzesz z naszej strony Discord po weryfikacji. Aktywacja jest **natychmiastowa**. Po aktywacji Twoje konto Discord zostanie przypisane do licencji, co da Ci pełny dostęp do wszystkich funkcjonalności. W razie problemów, nasz zespół wsparcia technicznego jest dostępny $24/7$ na Discordzie.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Czy mogę otrzymać zwrot pieniędzy?</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Zwroty pieniędzy są możliwe tylko w ściśle określonych przypadkach i muszą być zgłoszone w ciągu **$48$ godzin od zakupu**. Warunkiem jest udowodnienie, że klient nie działa poprawnie na Twoim systemie operacyjnym (Windows/Linux/macOS) i nie byliśmy w stanie rozwiązać problemu zdalnie w ciągu $7$ dni. Zwroty nie są akceptowane z powodów takich jak: "dostałem bana" lub "klient mi się nie podoba". Prosimy o zapoznanie się z naszym pełnym Regulaminem Zakupów przed dokonaniem transakcji.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CUSTOM MODAL (ZASTĘPUJE ALERT/CONFIRM) -->
+    <div id="customModal" class="custom-modal-backdrop">
+        <div class="custom-modal">
+            <h3 id="modalTitle"></h3>
+            <p id="modalMessage"></p>
+            <div class="modal-buttons">
+                <!-- Przyciski ładowane dynamicznie przez JS -->
+            </div>
+        </div>
     </div>
 
-    <div class="menu">
-      <a href="#">Strona główna</a>
-      <a href="#">Zakup</a>
-      <a href="#">FAQ</a>
-    </div>
-  </nav>
 
-  <section class="hero">
-    <h1>Optimizer Cheats</h1>
-    <p>Jedne z tańszych i najlepszych Cheat Clientów!</p>
-    <a href="#" class="btn">Zobacz Oferte</a>
-  </section>
+    <script>
+        // GLOBALNE ZMIENNE I INICJALIZACJA
+        const nav = document.querySelector('nav');
+        const menuLinks = document.querySelectorAll('.menu a, .content-section a[data-section-id]');
+        const transitionDuration = 400; // Czas trwania przejścia w ms
+        
+        let loggedIn = false;
+        const user = { 
+            username: "Fabian#1234", 
+            avatar: "https://cdn.discordapp.com/embed/avatars/0.png" 
+        };
+        let userPanel;
+        let discordBtn;
 
-  <script>
-    const nav = document.querySelector('nav');
 
-    // Tworzymy przycisk Discord dynamicznie
-    const discordBtn = document.createElement('button');
-    discordBtn.className = 'discord-btn';
-    discordBtn.innerHTML = `
-      <img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord logo">
-      Zaloguj przez Discord
-    `;
-    discordBtn.style.cursor = 'pointer';
-    nav.appendChild(discordBtn);
+        // ===============================================
+        // MODAL (Zastępuje alert() i confirm())
+        // ===============================================
 
-    let loggedIn = false;
-    const user = { 
-      username: "Fabian#1234", 
-      avatar: "https://cdn.discordapp.com/embed/avatars/0.png" 
-    };
+        const modalBackdrop = document.getElementById('customModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalButtons = modalBackdrop.querySelector('.modal-buttons');
 
-    let userPanel;
+        function hideModal() {
+            modalBackdrop.classList.remove('show');
+            modalButtons.innerHTML = ''; 
+        }
 
-    discordBtn.addEventListener('click', () => {
-      if (!loggedIn) {
-        alert("Kliknięto Discord! (OAuth działa tylko na HTTPS)");
-        // window.location.href = "https://discord.com/oauth2/authorize?..."; // odblokuj na serwerze
-      } else {
-        if(userPanel) userPanel.classList.toggle('show');
-      }
-    });
+        function showMessage(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            
+            const okBtn = document.createElement('button');
+            okBtn.className = 'modal-ok';
+            okBtn.textContent = 'Rozumiem';
+            okBtn.onclick = hideModal;
+            modalButtons.appendChild(okBtn);
 
-    function loginUser() {
-      loggedIn = true;
-      discordBtn.innerHTML = `<img src="${user.avatar}" alt="Avatar"><span class="arrow">▼</span>`;
+            modalBackdrop.classList.add('show');
+            return new Promise(resolve => resolve(true));
+        }
 
-      if (!userPanel) {
-        userPanel = document.createElement('div');
-        userPanel.className = 'user-panel';
-        userPanel.innerHTML = `
-          <img src="${user.avatar}" class="user-avatar">
-          <div class="user-name">${user.username}</div>
-          <button class="settings-btn">Ustawienia</button>
-          <button class="logout-btn">Wyloguj</button>
-        `;
-        document.body.appendChild(userPanel);
+        function showConfirmation(title, message) {
+            return new Promise(resolve => {
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
 
-        userPanel.querySelector('.logout-btn').addEventListener('click', () => {
-          if (confirm("Czy napewno wylogować?")) {
-            loggedIn = false;
-            userPanel.remove();
-            userPanel = null;
-            discordBtn.innerHTML = `
-              <img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord logo">
-              Zaloguj przez Discord
-            `;
-          }
+                const cancelBtn = document.createElement('button');
+                cancelBtn.className = 'modal-cancel';
+                cancelBtn.textContent = 'Anuluj';
+                cancelBtn.onclick = () => {
+                    hideModal();
+                    resolve(false);
+                };
+
+                const confirmBtn = document.createElement('button');
+                confirmBtn.className = 'modal-confirm';
+                confirmBtn.textContent = 'Wyloguj';
+                confirmBtn.onclick = () => {
+                    hideModal();
+                    resolve(true);
+                };
+
+                modalButtons.appendChild(cancelBtn);
+                modalButtons.appendChild(confirmBtn);
+                modalBackdrop.classList.add('show');
+            });
+        }
+
+
+        // ===============================================
+        // OBSŁUGA SEKCJI (PRZEJŚCIA)
+        // ===============================================
+
+        function switchSection(targetId) {
+            const newSection = document.getElementById(targetId);
+            const activeSection = document.querySelector('.content-section.active');
+
+            if (newSection && newSection !== activeSection) {
+                if (activeSection) {
+                    activeSection.classList.remove('active');
+                    setTimeout(() => {
+                        activeSection.style.display = 'none';
+                    }, transitionDuration);
+                }
+
+                setTimeout(() => {
+                    newSection.style.display = 'block';
+                    setTimeout(() => {
+                        newSection.classList.add('active');
+                    }, 50); 
+                    
+                }, activeSection ? transitionDuration : 0); 
+            }
+        }
+        
+        function updateActiveNav(targetId) {
+            const hashId = targetId.replace('-section', '');
+            
+            menuLinks.forEach(link => {
+                link.classList.remove('text-[#c77dff]', 'font-bold');
+                if (link.getAttribute('href') === `#${hashId}`) {
+                    link.classList.add('text-[#c77dff]', 'font-bold');
+                }
+            });
+        }
+
+
+        // ===============================================
+        // OBSŁUGA NAWIGACJI I LINKÓW
+        // ===============================================
+
+        function handleNavigation(event) {
+            event.preventDefault();
+            
+            let targetId = event.currentTarget.dataset.sectionId; 
+
+            if (!targetId && event.currentTarget.getAttribute('href')) {
+                const hash = event.currentTarget.getAttribute('href').substring(1);
+                targetId = hash + '-section';
+            }
+
+            if (targetId) {
+                switchSection(targetId);
+
+                const hash = '#' + targetId.replace('-section', '');
+                history.pushState(null, null, hash);
+                updateActiveNav(targetId);
+            }
+        }
+
+        menuLinks.forEach(link => {
+            link.addEventListener('click', handleNavigation);
         });
-      }
-    }
 
-    // Włącz do testu lokalnego:
-    // loginUser();
-  </script>
+        window.addEventListener('popstate', () => {
+            const hash = window.location.hash.substring(1) || 'home';
+            switchSection(hash + '-section');
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.substring(1) || 'home';
+            const initialId = hash + '-section';
+            
+            const initialSection = document.getElementById(initialId);
+            
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.style.display = 'none';
+                sec.classList.remove('active');
+            });
+
+            if (initialSection) {
+                initialSection.style.display = 'block';
+                initialSection.classList.add('active');
+                updateActiveNav(initialId);
+            } else {
+                 const home = document.getElementById('home-section');
+                 home.style.display = 'block';
+                 home.classList.add('active');
+                 updateActiveNav('home-section');
+            }
+        });
+
+
+        // ===============================================
+        // OBSŁUGA AKORDIONU (FAQ)
+        // ===============================================
+
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.closest('.accordion-item');
+                const content = item.querySelector('.accordion-content');
+                
+                document.querySelectorAll('.accordion-item.open').forEach(openItem => {
+                    if (openItem !== item) {
+                        openItem.classList.remove('open');
+                        openItem.querySelector('.accordion-content').style.maxHeight = 0;
+                    }
+                });
+
+                item.classList.toggle('open');
+                if (item.classList.contains('open')) {
+                    content.style.maxHeight = (content.scrollHeight + 10) + "px"; 
+                } else {
+                    content.style.maxHeight = 0;
+                }
+            });
+        });
+
+
+        // ===============================================
+        // OBSŁUGA LOGOWANIA DISCORD
+        // ===============================================
+
+        function createDiscordButton() {
+            discordBtn = document.createElement('button');
+            discordBtn.className = 'discord-btn';
+            
+            if (loggedIn) {
+                discordBtn.innerHTML = `<img src="${user.avatar}" class="user-avatar" alt="Avatar"><span class="ml-2">▼</span>`;
+            } else {
+                 discordBtn.innerHTML = `
+                    <img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord logo">
+                    Zaloguj przez Discord
+                `;
+            }
+            nav.appendChild(discordBtn);
+
+            discordBtn.addEventListener('click', handleDiscordClick);
+        }
+
+        function handleDiscordClick() {
+            if (!loggedIn) {
+                showMessage("Logowanie Discord", "Kliknięto przycisk Discord! (Logowanie OAuth działa tylko na serwerach HTTPS.)");
+            } else {
+                if(userPanel) userPanel.classList.toggle('show');
+            }
+        }
+
+        function loginUser() {
+            loggedIn = true;
+            if (discordBtn) {
+                discordBtn.innerHTML = `<img src="${user.avatar}" class="user-avatar" alt="Avatar"><span class="ml-2">▼</span>`;
+            }
+            if (!userPanel) {
+                userPanel = document.createElement('div');
+                userPanel.className = 'user-panel';
+                userPanel.innerHTML = `
+                    <img src="${user.avatar}" class="user-avatar" alt="Avatar">
+                    <div class="user-name">${user.username}</div>
+                    <button class="settings-btn">Ustawienia</button>
+                    <button class="logout-btn">Wyloguj</button>
+                `;
+                document.body.appendChild(userPanel);
+
+                userPanel.querySelector('.logout-btn').addEventListener('click', async () => {
+                    const confirmed = await showConfirmation("Potwierdzenie Wylogowania", "Czy na pewno chcesz się wylogować z konta Discord?");
+                    if (confirmed) {
+                        logoutUser();
+                    }
+                });
+            }
+        }
+
+        function logoutUser() {
+            loggedIn = false;
+            if(userPanel) {
+                userPanel.remove();
+                userPanel = null;
+            }
+            if (discordBtn) {
+                 discordBtn.innerHTML = `
+                    <img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord logo">
+                    Zaloguj przez Discord
+                `;
+            }
+        }
+
+        createDiscordButton();
+        // loginUser(); 
+    </script>
 </body>
 </html>

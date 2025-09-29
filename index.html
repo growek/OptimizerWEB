@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Optimizer Cheats – Minecraft</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow-x: hidden; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+      position: relative;
+      overflow-x: hidden;
+
+      background: url('img/OptimizerMainBG.png') repeat-x top;
+      background-size: auto 100%;
+      animation: scrollBG 30s linear infinite;
+    }
+
+    @keyframes scrollBG {
+      0% { background-position-x: 0; }
+      100% { background-position-x: 1000px; }
+    }
+
+    nav {
+      width: 100%;
+      padding: 10px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.4);
+      position: fixed;
+      top: 0;
+      left: 0;
+      backdrop-filter: blur(6px);
+      z-index: 100;
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 101;
+    }
+
+    .logo { width: 50px; height: 50px; background: #fff; border-radius: 8px; }
+    .brand { font-weight: 700; font-size: 1rem; color: #fff; }
+
+    .menu {
+      display: flex;
+      gap: 55px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 101;
+    } 
+
+    .menu a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+    }
+    .menu a:hover { color: #c77dff; }
+
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 160px 20px 80px;
+      position: relative;
+      z-index: 101;
+    }
+    h1 { font-size: 3rem; margin-bottom: 15px; }
+    p { font-size: 1.2rem; margin-bottom: 25px; color: #d0d0d0; }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      font-size: 1.2rem;
+      color: #fff;
+      background: #7b2cbf;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .btn:hover { background: #9d4edd; }
+
+    /* Panel użytkownika */
+    .user-panel {
+      position: absolute;
+      top: 70px;
+      right: 50px;
+      width: 220px;
+      background: rgba(0,0,0,0.8);
+      border-radius: 12px;
+      padding: 15px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 102;
+    }
+    .user-panel.show { display: flex; }
+    .user-panel .user-avatar { width: 70px; height: 70px; border-radius: 50%; }
+    .user-panel .user-name { font-weight: 600; color: #fff; text-align: center; }
+    .user-panel button {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .user-panel .settings-btn { background: #7b2cbf; color: #fff; }
+    .user-panel .logout-btn { background: #f03e3e; color: #fff; }
+
+    .discord-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #5865F2;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+      z-index: 101;
+    }
+    .discord-btn:hover { background: #4752c4; }
+    .discord-btn img { width: 25px; height: 25px; filter: invert(1); }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="left">
+      <div class="logo"></div>
+      <div class="brand">Optimizer</div>
+    </div>
+
+    <div class="menu">
+      <a href="#">Strona główna</a>
+      <a href="#">Zakup</a>
+      <a href="#">FAQ</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>Optimizer Cheats</h1>
+    <p>Jedne z tańszych i najlepszych Cheat Clientów!</p>
+    <a href="#" class="btn">Zobacz Oferte</a>
+  </section>
+
+  <script>
+    const nav = document.querySelector('nav');
+
+    // Tworzymy przycisk Discord dynamicznie
+    const discordBtn = document.createElement('button');
+    discordBtn.className = 'discord-btn';
+    discordBtn.innerHTML = `
+      <img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord logo">
+      Zaloguj przez Discord
+    `;
+    discordBtn.style.cursor = 'pointer';
+    nav.appendChild(discordBtn);
+
+    let loggedIn = false;
+    const user = { 
+      username: "Fabian#1234", 
+      avatar: "https://cdn.discordapp.com/embed/avatars/0.png" 
+    };
+
+    let userPanel;
+
+    discordBtn.addEventListener('click', () => {
+      if (!loggedIn) {
+        alert("Kliknięto Discord! (OAuth działa tylko na HTTPS)");
+        // window.location.href = "https://discord.com/oauth2/authorize?..."; // odblokuj na serwerze
+      } else {
+        if(userPanel) userPanel.classList.toggle('show');
+      }
+    });
+
+    function loginUser() {
+      loggedIn = true;
+      discordBtn.innerHTML = `<img src="${user.avatar}" alt="Avatar"><span class="arrow">▼</span>`;
+
+      if (!userPanel) {
+        userPanel = document.createElement('div');
+        userPanel.className = 'user-panel';
+        userPanel.innerHTML = `
+          <img src="${user.avatar}" class="user-avatar">
+          <div class="user-name">${user.username}</div>
+          <button class="settings-btn">Ustawienia</button>
+          <button class="logout-btn">Wyloguj</button>
+        `;
+        document.body.appendChild(userPanel);
+
+        userPanel.querySelector('.logout-btn').addEventListener('click', () => {
+          if (confirm("Czy napewno wylogować?")) {
+            loggedIn = false;
+            userPanel.remove();
+            userPanel = null;
+            discordBtn.innerHTML = `
+              <img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord logo">
+              Zaloguj przez Discord
+            `;
+          }
+        });
+      }
+    }
+
+    // Włącz do testu lokalnego:
+    // loginUser();
+  </script>
+</body>
+</html>

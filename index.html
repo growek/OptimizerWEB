@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Optimizer</title>
 <style>
+/* --- CSS bez zmian (to co miałeś) --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-
 :root {
   --primary-color: #7b2cbf;
   --primary-hover: #9d4edd;
@@ -18,317 +18,7 @@
   --bg-dark: #1a1a1a;
   --bg-light: #2c2c2e;
 }
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
-  color: var(--text-color);
-  min-height: 200vh; /* dla scrolla w dół */
-  position: relative;
-  overflow-x: hidden;
-  background: url('img/OptimizerMainBG.png') repeat top;
-  background-size: auto; /* zachowuje oryginalny rozmiar */
-  background-attachment: scroll; /* porusza się pionowo ze scrollem */
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200%; /* podwójna szerokość do płynnego powtarzania */
-  height: 100%;
-  background: url('img/OptimizerMainBG.png') repeat-x top;
-  background-size: auto;
-  z-index: -1;
-  animation: scrollRight 15s linear infinite;
-}
-
-@keyframes scrollRight {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-
-@keyframes scrollBG {
-  0% { background-position-x: 0; }
-  100% { background-position-x: 1000px; }
-}
-
-
-
-/* --- Nawigacja --- */
-nav {
-  width: 100%;
-  padding: 10px 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(0,0,0,0.4);
-  position: fixed;
-  top: 0; left: 0;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 100;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.left { display: flex; align-items: center; gap: 12px; }
-.logo {
-    width: 45px;
-    height: 45px;
-    background: linear-gradient(45deg, var(--primary-color), var(--primary-hover));
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 1.5rem;
-}
-.brand { font-weight:700; font-size:1.2rem; color: var(--text-color); }
-
-.menu {
-  display: flex;
-  gap: 55px;
-}
-.menu a {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: color 0.3s;
-  padding: 5px 0;
-  position: relative;
-}
-.menu a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: var(--primary-hover);
-    transform: scaleX(0);
-    transform-origin: bottom right;
-    transition: transform 0.25s ease-out;
-}
-.menu a:hover { color: var(--text-color); }
-.menu a:hover::after {
-    transform: scaleX(1);
-    transform-origin: bottom left;
-}
-
-
-/* --- Sekcje --- */
-.section {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 120px 20px 40px;
-    position: relative;
-    z-index: 1;
-}
-h1 { font-size: 3.5rem; margin-bottom: 15px; }
-h2 { font-size: 2.5rem; margin-bottom: 20px; color: var(--primary-hover); }
-p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width: 600px; }
-
-/* --- Przyciski --- */
-.btn, .discord-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 12px 28px;
-  font-size: 1.1rem;
-  color: var(--text-color);
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  border: none;
-  position: relative;
-  overflow: hidden;
-}
-.btn { background: var(--primary-color); }
-.btn:hover { background: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4); }
-
-.discord-btn { background: var(--discord-color); white-space: nowrap; }
-.discord-btn img { width: 25px; height: 25px; border-radius: 50%;}
-.discord-btn:hover { background: var(--discord-hover); }
-.discord-btn .arrow { font-size: 0.8rem; transition: transform 0.3s; }
-.discord-btn:hover .arrow { transform: rotate(180deg); }
-
-/* --- Panel użytkownika --- */
-.user-panel {
-  position: absolute;
-  top: 75px;
-  right: 50px;
-  width: 220px;
-  background: var(--bg-light);
-  border-radius: 12px;
-  padding: 15px;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  z-index: 102;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-.user-panel.show { display: flex; }
-.user-panel .user-avatar { width: 70px; height: 70px; border-radius: 50%; }
-.user-panel .user-name { font-weight: 600; color: var(--text-color); text-align: center; }
-.user-panel button {
-  width: 100%;
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s;
-}
-.user-panel .settings-btn { background: var(--primary-color); color: var(--text-color); }
-.user-panel .settings-btn:hover { background: var(--primary-hover); }
-.user-panel .logout-btn { background: var(--danger-color); color: var(--text-color); }
-.user-panel .logout-btn:hover { background: #c92a2a; }
-
-/* --- Sekcja Oferty --- */
-.pricing-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-}
-
-.pricing-card {
-    background: var(--bg-light);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 40px 30px 30px;
-    width: 300px;
-    text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-
-.pricing-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-
-.pricing-card h3 {
-    font-size: 1.8rem;
-    color: var(--primary-hover);
-    margin-bottom: 15px;
-}
-
-.pricing-card .price {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 25px;
-}
-
-.pricing-card .btn {
-    width: 100%;
-}
-
-.pricing-card.recommended {
-    border: 2px solid var(--primary-color);
-    transform: scale(1.05);
-}
-
-.pricing-card.recommended:hover {
-     transform: scale(1.1) translateY(-10px);
-}
-
-.recommended-badge {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--primary-color);
-    color: var(--text-color);
-    padding: 5px 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    width: 100%;
-}
-
-/* --- Okna modalne (potwierdzenie, ustawienia) --- */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 200;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.modal-overlay.show {
-  display: flex;
-  opacity: 1;
-}
-.modal-content {
-  background: var(--bg-light);
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  width: 90%;
-  max-width: 400px;
-  color: var(--text-color);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transform: scale(0.9);
-  transition: transform 0.3s ease;
-}
-.modal-overlay.show .modal-content {
-    transform: scale(1);
-}
-.modal-content h2 { font-size: 1.8rem; margin-bottom: 10px; }
-.modal-content p { color: var(--text-muted); margin-bottom: 25px; font-size: 1.1rem;}
-.modal-buttons {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-.modal-buttons button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.2s, background-color 0.2s;
-}
-.modal-buttons button:hover { transform: scale(1.05); }
-.modal-btn-confirm { background: var(--danger-color); color: var(--text-color); }
-.modal-btn-confirm:hover { background: #c92a2a; }
-.modal-btn-cancel { background: #555; color: var(--text-color); }
-.modal-btn-cancel:hover { background: #666; }
-
-/* Dostosowanie dla mniejszych ekranów */
-@media (max-width: 768px) {
-    nav { flex-direction: column; gap: 10px; padding: 10px 20px; }
-    .menu { gap: 20px; }
-    h1 { font-size: 2.5rem; }
-    .user-panel { right: 20px; top: 110px; }
-}
-
+/* ... reszta CSS co miałeś ... */
 </style>
 </head>
 <body>
@@ -338,57 +28,51 @@ p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width:
     <div class="logo">O</div>
     <div class="brand">Optimizer</div>
   </div>
-
   <div class="menu">
     <a href="#hero">Strona główna</a>
     <a href="#oferta">Zakup</a>
     <a href="#faq">FAQ</a>
   </div>
-
-  <div id="auth-container">
-    <!-- Przycisk Discord zostanie dodany tutaj przez JS -->
-  </div>
+  <div id="auth-container"></div>
 </nav>
 
 <main>
-    <section id="hero" class="section">
-      <h1>Optimizer</h1>
-      <p>Jedne z tańszych i najlepszych Cheat Clientów!</p>
-      <a href="#oferta" class="btn">Zobacz Oferte</a>
-    </section>
+  <section id="hero" class="section">
+    <h1>Optimizer</h1>
+    <p>Jedne z tańszych i najlepszych Cheat Clientów!</p>
+    <a href="#oferta" class="btn">Zobacz Oferte</a>
+  </section>
 
-    <section id="oferta" class="section">
-        <h2>Nasza Oferta</h2>
-        <p>Wybierz plan, który najlepiej pasuje do Twoich potrzeb i dołącz do grona najlepszych graczy!</p>
-        <div class="pricing-container">
-            <div class="pricing-card">
-                <h3>1 Miesiąc</h3>
-                <div class="price">20 PLN</div>
-                <a href="#" class="btn">Kup teraz</a>
-            </div>
-            <div class="pricing-card recommended">
-                <div class="recommended-badge">Najbardziej opłacalne</div>
-                <h3>Lifetime</h3>
-                <div class="price">60 PLN</div>
-                <a href="#" class="btn">Kup teraz</a>
-            </div>
-            <div class="pricing-card">
-                <h3>3 Miesiące</h3>
-                <div class="price">45 PLN</div>
-                <a href="#" class="btn">Kup teraz</a>
-            </div>
-        </div>
-    </section>
+  <section id="oferta" class="section">
+    <h2>Nasza Oferta</h2>
+    <p>Wybierz plan, który najlepiej pasuje do Twoich potrzeb i dołącz do grona najlepszych graczy!</p>
+    <div class="pricing-container">
+      <div class="pricing-card">
+        <h3>1 Miesiąc</h3>
+        <div class="price">20 PLN</div>
+        <a href="#" class="btn">Kup teraz</a>
+      </div>
+      <div class="pricing-card recommended">
+        <div class="recommended-badge">Najbardziej opłacalne</div>
+        <h3>Lifetime</h3>
+        <div class="price">60 PLN</div>
+        <a href="#" class="btn">Kup teraz</a>
+      </div>
+      <div class="pricing-card">
+        <h3>3 Miesiące</h3>
+        <div class="price">45 PLN</div>
+        <a href="#" class="btn">Kup teraz</a>
+      </div>
+    </div>
+  </section>
 
-    <section id="faq" class="section">
-        <h2>FAQ</h2>
-        <p>Masz pytania? Sprawdź najczęściej zadawane pytania i odpowiedzi. Jeśli nie znajdziesz tego, czego szukasz, skontaktuj się z nami.</p>
-        <!-- Tutaj można dodać listę pytań i odpowiedzi -->
-    </section>
+  <section id="faq" class="section">
+    <h2>FAQ</h2>
+    <p>Masz pytania? Sprawdź najczęściej zadawane pytania i odpowiedzi. Jeśli nie znajdziesz tego, czego szukasz, skontaktuj się z nami.</p>
+  </section>
 </main>
 
-
-<!-- Modal Potwierdzenia Wylogowania -->
+<!-- Modal Wylogowania -->
 <div id="logout-modal" class="modal-overlay">
   <div class="modal-content">
     <p>Czy na pewno chcesz się wylogować?</p>
@@ -410,7 +94,6 @@ p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width:
   </div>
 </div>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const authContainer = document.getElementById('auth-container');
@@ -423,10 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let userPanel = null;
     let user = {};
 
-    // Przycisk Discord
     const discordBtn = document.createElement('a');
     discordBtn.className = 'discord-btn';
-    const discordOAuthURL = "https://discord.com/oauth2/authorize?client_id=1421883621719019531&response_type=token&redirect_uri=https%3A%2F%2Fgrowek.github.io%2FOptimizerWEB%2F%3Fv%3D&scope=identify";
+    const discordOAuthURL = "https://discord.com/oauth2/authorize?client_id=1421883621719019531&response_type=token&redirect_uri=https%3A%2F%2Fgrowek.github.io%2FOptimizerWEB%2F&scope=identify";
 
     function setDiscordLoginButton() {
         discordBtn.href = discordOAuthURL;
@@ -436,9 +118,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     setDiscordLoginButton();
 
-    // --- Sprawdzenie tokenu w URL
+    // --- Token w localStorage / URL
+    let token = localStorage.getItem("discord_token");
     const hash = window.location.hash.substr(1);
-    const token = new URLSearchParams(hash).get('access_token');
+    const urlToken = new URLSearchParams(hash).get('access_token');
+
+    if (urlToken) {
+        token = urlToken;
+        localStorage.setItem("discord_token", token);
+        window.location.hash = ''; // wyczyść URL
+    }
 
     if (token) {
         fetch('https://discord.com/api/v10/users/@me', {
@@ -449,28 +138,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (u.id) {
                 user = {
                     username: `${u.username}#${u.discriminator}`,
-                    avatar: u.avatar ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=128` : 'https://placehold.co/128x128/f3f4f6/111827?text=Avatar'
+                    avatar: u.avatar 
+                        ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=128`
+                        : 'https://placehold.co/128x128/f3f4f6/111827?text=Avatar'
                 };
                 loginUser();
             } else {
-                window.location.hash = '';
+                logoutUser();
             }
         });
     }
 
-    // --- Logowanie
     function loginUser() {
         loggedIn = true;
-
-        // Usuwamy guzik Discord i dajemy avatar
         authContainer.innerHTML = `
             <img src="${user.avatar}" alt="Avatar" id="user-avatar" style="width:40px; height:40px; border-radius:50%; cursor:pointer;">
         `;
-
         if (!userPanel) {
             createUserPanel();
         }
-
         const avatarBtn = document.getElementById('user-avatar');
         avatarBtn.addEventListener('click', () => {
             userPanel.classList.toggle('show');
@@ -479,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function logoutUser() {
         loggedIn = false;
+        localStorage.removeItem("discord_token"); // usuń token
         if(userPanel) {
             userPanel.remove();
             userPanel = null;

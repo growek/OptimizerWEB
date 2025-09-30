@@ -426,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Przycisk Discord
     const discordBtn = document.createElement('a');
     discordBtn.className = 'discord-btn';
-    const discordOAuthURL = "https://discord.com/oauth2/authorize?client_id=1421883621719019531&response_type=token&redirect_uri=https%3A%2F%2Fgrowek.github.io%2FOptimizerWEB%2F&scope=identify";
+    const discordOAuthURL = "https://discord.com/oauth2/authorize?client_id=1421883621719019531&response_type=token&redirect_uri=https%3A%2F%2Fgrowek.github.io%2FOptimizerWEB%2F&scope=identify%20email%20guilds.join";
 
     function setDiscordLoginButton() {
         discordBtn.href = discordOAuthURL;

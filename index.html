@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Optimizer Cheats – Minecraft</title>
+<title>Optimizer</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
@@ -352,7 +352,7 @@ p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width:
 
 <main>
     <section id="hero" class="section">
-      <h1>Optimizer Cheats</h1>
+      <h1>Optimizer</h1>
       <p>Jedne z tańszych i najlepszych Cheat Clientów!</p>
       <a href="#oferta" class="btn">Zobacz Oferte</a>
     </section>
@@ -413,32 +413,30 @@ p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width:
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Elementy DOM ---
     const authContainer = document.getElementById('auth-container');
     const logoutModal = document.getElementById('logout-modal');
     const settingsModal = document.getElementById('settings-modal');
     const confirmLogoutBtn = document.getElementById('confirm-logout-btn');
     const closeModalBtns = document.querySelectorAll('.close-modal');
 
-    // --- Stan Aplikacji ---
     let loggedIn = false;
     let userPanel = null;
     let user = {};
 
-    // --- Inicjalizacja Przycisku Discord ---
+    // Przycisk Discord
     const discordBtn = document.createElement('a');
     discordBtn.className = 'discord-btn';
-    const discordOAuthURL = "https://discord.com/oauth2/authorize?client_id=1421883621719019531&response_type=code&redirect_uri=https%3A%2F%2Fgrowek.github.io%2FOptimizerWEB%2F%3Fv%3D&scope=identify+email+guilds.join+guilds";
+    const discordOAuthURL = "https://discord.com/oauth2/authorize?client_id=1421883621719019531&response_type=token&redirect_uri=https%3A%2F%2Fgrowek.github.io%2FOptimizerWEB%2F%3Fv%3D&scope=identify";
 
     function setDiscordLoginButton() {
         discordBtn.href = discordOAuthURL;
         discordBtn.innerHTML = `<img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord logo"> Połącz z Discordem`;
+        authContainer.innerHTML = "";
+        authContainer.appendChild(discordBtn);
     }
     setDiscordLoginButton();
-    authContainer.appendChild(discordBtn);
 
-
-    // --- Logika Logowania (OAuth2) ---
+    // --- Sprawdzenie tokenu w URL
     const hash = window.location.hash.substr(1);
     const token = new URLSearchParams(hash).get('access_token');
 
@@ -455,21 +453,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 loginUser();
             } else {
-                 // Wyczyść hash, jeśli token jest nieprawidłowy
-                 window.location.hash = '';
+                window.location.hash = '';
             }
         });
     }
 
-    // --- Funkcje Użytkownika ---
+    // --- Logowanie
     function loginUser() {
         loggedIn = true;
-        discordBtn.innerHTML = `<img src="${user.avatar}" alt="Avatar"> ${user.username} <span class="arrow">▼</span>`;
-        discordBtn.href = "#";
+
+        // Usuwamy guzik Discord i dajemy avatar
+        authContainer.innerHTML = `
+            <img src="${user.avatar}" alt="Avatar" id="user-avatar" style="width:40px; height:40px; border-radius:50%; cursor:pointer;">
+        `;
 
         if (!userPanel) {
             createUserPanel();
         }
+
+        const avatarBtn = document.getElementById('user-avatar');
+        avatarBtn.addEventListener('click', () => {
+            userPanel.classList.toggle('show');
+        });
     }
 
     function logoutUser() {
@@ -506,14 +511,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Event Listeners ---
-    discordBtn.addEventListener('click', e => {
-        if (loggedIn) {
-            e.preventDefault();
-            if (userPanel) userPanel.classList.toggle('show');
-        }
-    });
-
     confirmLogoutBtn.addEventListener('click', logoutUser);
 
     closeModalBtns.forEach(btn => {
@@ -527,12 +524,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === logoutModal || e.target === settingsModal) {
             e.target.classList.remove('show');
         }
-        if(userPanel && !userPanel.contains(e.target) && e.target !== discordBtn && !discordBtn.contains(e.target)){
+        if(userPanel && !userPanel.contains(e.target) && e.target.id !== "user-avatar"){
             userPanel.classList.remove('show');
         }
     });
 });
 </script>
-
 </body>
 </html>

@@ -493,112 +493,114 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutModal = document.getElementById('logout-modal');
     const settingsModal = document.getElementById('settings-modal');
     const confirmLogoutBtn = document.getElementById('confirm-logout-btn');
-
-    // Przyciski logowania w nav
     const siteLoginBtn = document.getElementById('site-login-btn');
 
+    const API_URL = 'http://89.213.45.50:5000'; // Twój backend
+
+    // Otwieranie modalu logowania
     siteLoginBtn.addEventListener('click', () => {
         openModal(loginModal);
     });
 
     // Zakładki login/register
     tabLogin.addEventListener('click', () => {
-      tabLogin.classList.add('active');
-      tabRegister.classList.remove('active');
-      loginForm.style.display = 'block';
-      registerForm.style.display = 'none';
-      document.getElementById('login-title').innerText = 'Zaloguj się';
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+        document.getElementById('login-title').innerText = 'Zaloguj się';
     });
+
     tabRegister.addEventListener('click', () => {
-      tabRegister.classList.add('active');
-      tabLogin.classList.remove('active');
-      loginForm.style.display = 'none';
-      registerForm.style.display = 'block';
-      document.getElementById('login-title').innerText = 'Zarejestruj się';
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+        document.getElementById('login-title').innerText = 'Zarejestruj się';
     });
 
     // Zamknięcie modali
     closeModalBtns.forEach(btn => btn.addEventListener('click', () => {
-      closeModal(loginModal);
-      closeModal(logoutModal);
-      closeModal(settingsModal);
+        closeModal(loginModal);
+        closeModal(logoutModal);
+        closeModal(settingsModal);
     }));
 
     window.addEventListener('click', (e) => {
-      if (e.target === loginModal) closeModal(loginModal);
-      if (e.target === logoutModal) closeModal(logoutModal);
-      if (e.target === settingsModal) closeModal(settingsModal);
+        if (e.target === loginModal) closeModal(loginModal);
+        if (e.target === logoutModal) closeModal(logoutModal);
+        if (e.target === settingsModal) closeModal(settingsModal);
     });
 
     function openModal(el) {
-      el.classList.add('show');
+        el.classList.add('show');
     }
     function closeModal(el) {
-      el.classList.remove('show');
+        el.classList.remove('show');
     }
 
-    // TODO: podmień API_URL na adres Twojego backendu (np. http://TWÓJ_VPS:5000)
-    const API_URL = 'http://89.213.45.50:5000';
+    // --- Logowanie ---
+    loginForm && loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value.trim();
 
-    // Obsługa logowania (przykład, wyślij do backendu)
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value.trim();
-
-      try {
-        const res = await fetch(API_URL + '/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          alert('Zalogowano jako ' + (data.username || 'użytkownik'));
-          closeModal(loginModal);
-          // tutaj możesz zapisać token / zaktualizować UI
-        } else {
-          alert(data.message || 'Błąd logowania');
+        try {
+            const res = await fetch(`${API_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                alert('Zalogowano jako ' + data.username);
+                closeModal(loginModal);
+            } else {
+                alert(data.message || 'Błąd logowania');
+            }
+        } catch (err) {
+            alert('Błąd połączenia z API');
+            console.error(err);
         }
-      } catch (err) {
-        alert('Błąd połączenia z API');
-        console.error(err);
-      }
     });
 
-    // Obsługa rejestracji (przykład)
-    registerForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const username = document.getElementById('reg-username').value.trim();
-      const email = document.getElementById('reg-email').value.trim();
-      const password = document.getElementById('reg-password').value.trim();
+    // --- Rejestracja ---
+    registerForm && registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('reg-username').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const password = document.getElementById('reg-password').value.trim();
 
-      try {
-        const res = await fetch(API_URL + '/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, email, password })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          alert('Zarejestrowano. Twój klucz: ' + (data.license_key || '—'));
-          closeModal(loginModal);
-        } else {
-          alert(data.message || 'Błąd rejestracji');
+        if(!username || !email || !password){
+            alert('Wypełnij wszystkie pola');
+            return;
         }
-      } catch (err) {
-        alert('Błąd połączenia z API');
-        console.error(err);
-      }
+
+        try {
+            const res = await fetch(`${API_URL}/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                alert('Zarejestrowano. Twój klucz licencyjny: ' + (data.license_key || '—'));
+                closeModal(loginModal);
+                registerForm.reset();
+            } else {
+                alert(data.message || 'Błąd rejestracji');
+            }
+        } catch (err) {
+            alert('Błąd połączenia z API');
+            console.error(err);
+        }
     });
 
-    // Obsługa logout/settings modali (zostawione jak wcześniej)
+    // Logout/settings
     confirmLogoutBtn && confirmLogoutBtn.addEventListener('click', () => {
-      // tu dopisz logikę wylogowania jeśli potrzebujesz
-      closeModal(logoutModal);
-      alert('Wylogowano (lokalnie)');
+        closeModal(logoutModal);
+        alert('Wylogowano (lokalnie)');
     });
-
 });
 </script>
 </body>

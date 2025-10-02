@@ -265,7 +265,7 @@ p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width:
     width: 100%;
 }
 
-/* --- Okna modalne (potwierdzenie, ustawienia) --- */
+/* --- Okna modalne (potwierdzenie, ustawienia, login) --- */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -321,6 +321,41 @@ p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width:
 .modal-btn-cancel { background: #555; color: var(--text-color); }
 .modal-btn-cancel:hover { background: #666; }
 
+/* --- Login form inside modal --- */
+.login-form input, .login-form button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  color: var(--text-color);
+}
+.login-tabs {
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+}
+.login-tabs button {
+  flex:1;
+  padding:8px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  background: rgba(255,255,255,0.03);
+  color:var(--text-muted);
+  font-weight:600;
+}
+.login-tabs button.active { background: var(--primary-color); color:var(--text-color); }
+
+/* Stopka */
+footer {
+  text-align: center;
+  padding: 50px 20px;
+  background: rgba(0,0,0,0.25);
+  margin-top: 50px;
+}
+
 /* Dostosowanie dla mniejszych ekranów */
 @media (max-width: 768px) {
     nav { flex-direction: column; gap: 10px; padding: 10px 20px; }
@@ -345,8 +380,9 @@ p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width:
     <a href="#faq">FAQ</a>
   </div>
 
+  <!-- TU: zamiast Discorda jest przycisk logowania -->
   <div id="auth-container">
-    <!-- Przycisk Discord zostanie dodany tutaj przez JS -->
+    <button id="site-login-btn" class="btn">Zaloguj się</button>
   </div>
 </nav>
 
@@ -387,8 +423,7 @@ p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width:
     </section>
 </main>
 
-
-<!-- Modal Potwierdzenia Wylogowania -->
+<!-- Modale istniejące (logout/settings) -->
 <div id="logout-modal" class="modal-overlay">
   <div class="modal-content">
     <p>Czy na pewno chcesz się wylogować?</p>
@@ -399,7 +434,6 @@ p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width:
   </div>
 </div>
 
-<!-- Modal Ustawień -->
 <div id="settings-modal" class="modal-overlay">
   <div class="modal-content">
     <h2>Ustawienia</h2>
@@ -410,128 +444,161 @@ p { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-muted); max-width:
   </div>
 </div>
 
+<!-- Nowy modal: logowanie / rejestracja -->
+<div id="login-modal" class="modal-overlay">
+  <div class="modal-content">
+    <h2 id="login-title">Zaloguj się</h2>
+
+    <div class="login-tabs">
+      <button id="tab-login" class="active">Logowanie</button>
+      <button id="tab-register">Rejestracja</button>
+    </div>
+
+    <form id="login-form" class="login-form">
+      <input type="email" id="login-email" placeholder="Email" required>
+      <input type="password" id="login-password" placeholder="Hasło" required>
+      <button type="submit" class="btn">Zaloguj</button>
+    </form>
+
+    <form id="register-form" class="login-form" style="display:none;">
+      <input type="text" id="reg-username" placeholder="Nazwa użytkownika" required>
+      <input type="email" id="reg-email" placeholder="Email" required>
+      <input type="password" id="reg-password" placeholder="Hasło" required>
+      <button type="submit" class="btn">Zarejestruj</button>
+    </form>
+
+    <div style="margin-top:10px;">
+      <button class="modal-btn-cancel close-modal">Zamknij</button>
+    </div>
+  </div>
+</div>
+
+<!-- Stopka z przyciskiem Discord (przeniesiony) -->
+<footer>
+  <a href="https://discord.com/oauth2/authorize?client_id=1421883621719019531&response_type=token&redirect_uri=https%3A%2F%2Fgrowek.github.io%2FOptimizerWEB%2F&scope=identify" 
+     class="discord-btn" target="_blank" rel="noopener noreferrer">
+    <img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord logo"> Połącz z Discordem
+  </a>
+</footer>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const authContainer = document.getElementById('auth-container');
+    const loginModal = document.getElementById('login-modal');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const closeModalBtns = document.querySelectorAll('.close-modal');
     const logoutModal = document.getElementById('logout-modal');
     const settingsModal = document.getElementById('settings-modal');
     const confirmLogoutBtn = document.getElementById('confirm-logout-btn');
-    const closeModalBtns = document.querySelectorAll('.close-modal');
 
-    let loggedIn = false;
-    let userPanel = null;
-    let user = {};
+    // Przyciski logowania w nav
+    const siteLoginBtn = document.getElementById('site-login-btn');
 
-    // Przycisk Discord
-    const discordBtn = document.createElement('a');
-    discordBtn.className = 'discord-btn';
-    const discordOAuthURL = "https://discord.com/oauth2/authorize?client_id=1421883621719019531&response_type=token&redirect_uri=https%3A%2F%2Fgrowek.github.io%2FOptimizerWEB%2F&scope=identify%20email%20guilds.join";
-
-    function setDiscordLoginButton() {
-        discordBtn.href = discordOAuthURL;
-        discordBtn.innerHTML = `<img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord logo"> Połącz z Discordem`;
-        authContainer.innerHTML = "";
-        authContainer.appendChild(discordBtn);
-    }
-    setDiscordLoginButton();
-
-    // --- Token w localStorage lub URL
-    let token = localStorage.getItem("discord_token");
-    const hash = window.location.hash.substr(1);
-    const urlToken = new URLSearchParams(hash).get('access_token');
-
-    if (urlToken) {
-        token = urlToken;
-        localStorage.setItem("discord_token", token); // zapisz token
-        window.location.hash = ''; // czyść URL
-    }
-
-    if (token) {
-        fetch('https://discord.com/api/v10/users/@me', {
-            headers: { 'Authorization': 'Bearer ' + token }
-        })
-        .then(res => res.json())
-        .then(u => {
-            if (u.id) {
-                user = {
-                    username: `${u.username}#${u.discriminator}`,
-                    avatar: u.avatar ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=128` : 'https://placehold.co/128x128/f3f4f6/111827?text=Avatar'
-                };
-                loginUser();
-            } else {
-                logoutUser();
-            }
-        });
-    }
-
-    // --- Logowanie
-    function loginUser() {
-        loggedIn = true;
-        authContainer.innerHTML = `
-            <img src="${user.avatar}" alt="Avatar" id="user-avatar" style="width:40px; height:40px; border-radius:50%; cursor:pointer;">
-        `;
-        if (!userPanel) {
-            createUserPanel();
-        }
-        const avatarBtn = document.getElementById('user-avatar');
-        avatarBtn.addEventListener('click', () => {
-            userPanel.classList.toggle('show');
-        });
-    }
-
-    function logoutUser() {
-        loggedIn = false;
-        localStorage.removeItem("discord_token"); // usuń token przy wylogowaniu
-        if(userPanel) {
-            userPanel.remove();
-            userPanel = null;
-        }
-        user = {};
-        setDiscordLoginButton();
-        window.location.hash = '';
-        logoutModal.classList.remove('show');
-    }
-
-    function createUserPanel() {
-        userPanel = document.createElement('div');
-        userPanel.className = 'user-panel';
-        userPanel.innerHTML = `
-            <img src="${user.avatar}" class="user-avatar">
-            <div class="user-name">${user.username}</div>
-            <button class="settings-btn">Ustawienia</button>
-            <button class="logout-btn">Wyloguj</button>
-        `;
-        document.body.appendChild(userPanel);
-
-        userPanel.querySelector('.logout-btn').addEventListener('click', () => {
-            userPanel.classList.remove('show');
-            logoutModal.classList.add('show');
-        });
-
-        userPanel.querySelector('.settings-btn').addEventListener('click', () => {
-            userPanel.classList.remove('show');
-            settingsModal.classList.add('show');
-        });
-    }
-
-    confirmLogoutBtn.addEventListener('click', logoutUser);
-
-    closeModalBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            logoutModal.classList.remove('show');
-            settingsModal.classList.remove('show');
-        });
+    siteLoginBtn.addEventListener('click', () => {
+        openModal(loginModal);
     });
+
+    // Zakładki login/register
+    tabLogin.addEventListener('click', () => {
+      tabLogin.classList.add('active');
+      tabRegister.classList.remove('active');
+      loginForm.style.display = 'block';
+      registerForm.style.display = 'none';
+      document.getElementById('login-title').innerText = 'Zaloguj się';
+    });
+    tabRegister.addEventListener('click', () => {
+      tabRegister.classList.add('active');
+      tabLogin.classList.remove('active');
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'block';
+      document.getElementById('login-title').innerText = 'Zarejestruj się';
+    });
+
+    // Zamknięcie modali
+    closeModalBtns.forEach(btn => btn.addEventListener('click', () => {
+      closeModal(loginModal);
+      closeModal(logoutModal);
+      closeModal(settingsModal);
+    }));
 
     window.addEventListener('click', (e) => {
-        if (e.target === logoutModal || e.target === settingsModal) {
-            e.target.classList.remove('show');
-        }
-        if(userPanel && !userPanel.contains(e.target) && e.target.id !== "user-avatar"){
-            userPanel.classList.remove('show');
-        }
+      if (e.target === loginModal) closeModal(loginModal);
+      if (e.target === logoutModal) closeModal(logoutModal);
+      if (e.target === settingsModal) closeModal(settingsModal);
     });
+
+    function openModal(el) {
+      el.classList.add('show');
+    }
+    function closeModal(el) {
+      el.classList.remove('show');
+    }
+
+    // TODO: podmień API_URL na adres Twojego backendu (np. http://TWÓJ_VPS:5000)
+    const API_URL = 'http://TWÓJ_VPS:5000';
+
+    // Obsługa logowania (przykład, wyślij do backendu)
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+
+      try {
+        const res = await fetch(API_URL + '/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert('Zalogowano jako ' + (data.username || 'użytkownik'));
+          closeModal(loginModal);
+          // tutaj możesz zapisać token / zaktualizować UI
+        } else {
+          alert(data.message || 'Błąd logowania');
+        }
+      } catch (err) {
+        alert('Błąd połączenia z API');
+        console.error(err);
+      }
+    });
+
+    // Obsługa rejestracji (przykład)
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('reg-username').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value.trim();
+
+      try {
+        const res = await fetch(API_URL + '/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert('Zarejestrowano. Twój klucz: ' + (data.license_key || '—'));
+          closeModal(loginModal);
+        } else {
+          alert(data.message || 'Błąd rejestracji');
+        }
+      } catch (err) {
+        alert('Błąd połączenia z API');
+        console.error(err);
+      }
+    });
+
+    // Obsługa logout/settings modali (zostawione jak wcześniej)
+    confirmLogoutBtn && confirmLogoutBtn.addEventListener('click', () => {
+      // tu dopisz logikę wylogowania jeśli potrzebujesz
+      closeModal(logoutModal);
+      alert('Wylogowano (lokalnie)');
+    });
+
 });
 </script>
 </body>

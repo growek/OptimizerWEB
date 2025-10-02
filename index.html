@@ -483,24 +483,17 @@ footer {
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const authContainer = document.getElementById('auth-container');
-    const loginModal = document.getElementById('login-modal');
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
+    const loginModal = document.getElementById('login-modal');
+    const siteLoginBtn = document.getElementById('site-login-btn');
     const tabLogin = document.getElementById('tab-login');
     const tabRegister = document.getElementById('tab-register');
     const closeModalBtns = document.querySelectorAll('.close-modal');
-    const logoutModal = document.getElementById('logout-modal');
-    const settingsModal = document.getElementById('settings-modal');
-    const confirmLogoutBtn = document.getElementById('confirm-logout-btn');
-    const siteLoginBtn = document.getElementById('site-login-btn');
+    const API_URL = 'http://89.213.45.50:5000';
 
-    const API_URL = 'http://89.213.45.50:5000'; // Twój backend
-
-    // Otwieranie modalu logowania
-    siteLoginBtn.addEventListener('click', () => {
-        openModal(loginModal);
-    });
+    // Otwieranie modalu
+    siteLoginBtn.addEventListener('click', () => loginModal.classList.add('show'));
 
     // Zakładki login/register
     tabLogin.addEventListener('click', () => {
@@ -510,7 +503,6 @@ document.addEventListener('DOMContentLoaded', () => {
         registerForm.style.display = 'none';
         document.getElementById('login-title').innerText = 'Zaloguj się';
     });
-
     tabRegister.addEventListener('click', () => {
         tabRegister.classList.add('active');
         tabLogin.classList.remove('active');
@@ -520,86 +512,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Zamknięcie modali
-    closeModalBtns.forEach(btn => btn.addEventListener('click', () => {
-        closeModal(loginModal);
-        closeModal(logoutModal);
-        closeModal(settingsModal);
-    }));
+    closeModalBtns.forEach(btn => btn.addEventListener('click', () => loginModal.classList.remove('show')));
+    window.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.classList.remove('show'); });
 
-    window.addEventListener('click', (e) => {
-        if (e.target === loginModal) closeModal(loginModal);
-        if (e.target === logoutModal) closeModal(logoutModal);
-        if (e.target === settingsModal) closeModal(settingsModal);
-    });
-
-    function openModal(el) {
-        el.classList.add('show');
-    }
-    function closeModal(el) {
-        el.classList.remove('show');
-    }
-
-    // --- Logowanie ---
-    loginForm && loginForm.addEventListener('submit', async (e) => {
+    // Logowanie
+    loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value.trim();
-
         try {
             const res = await fetch(`${API_URL}/login`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type':'application/json'},
                 body: JSON.stringify({ email, password })
             });
             const data = await res.json();
-            if (res.ok) {
+            if(res.ok) {
                 alert('Zalogowano jako ' + data.username);
-                closeModal(loginModal);
+                loginForm.reset();
+                loginModal.classList.remove('show');
             } else {
                 alert(data.message || 'Błąd logowania');
             }
-        } catch (err) {
-            alert('Błąd połączenia z API');
-            console.error(err);
-        }
+        } catch(err) { alert('Błąd połączenia z API'); console.error(err); }
     });
 
-    // --- Rejestracja ---
-    registerForm && registerForm.addEventListener('submit', async (e) => {
+    // Rejestracja
+    registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('reg-username').value.trim();
         const email = document.getElementById('reg-email').value.trim();
         const password = document.getElementById('reg-password').value.trim();
-
-        if(!username || !email || !password){
-            alert('Wypełnij wszystkie pola');
-            return;
-        }
-
+        if(!username || !email || !password){ alert('Wypełnij wszystkie pola'); return; }
         try {
             const res = await fetch(`${API_URL}/register`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers:{'Content-Type':'application/json'},
                 body: JSON.stringify({ username, email, password })
             });
             const data = await res.json();
-            if (res.ok) {
-                alert('Zarejestrowano. Twój klucz licencyjny: ' + (data.license_key || '—'));
-                closeModal(loginModal);
+            if(res.ok){
+                alert('Zarejestrowano. Twój klucz: ' + (data.license_key || '—'));
                 registerForm.reset();
-            } else {
-                alert(data.message || 'Błąd rejestracji');
-            }
-        } catch (err) {
-            alert('Błąd połączenia z API');
-            console.error(err);
-        }
-    });
-
-    // Logout/settings
-    confirmLogoutBtn && confirmLogoutBtn.addEventListener('click', () => {
-        closeModal(logoutModal);
-        alert('Wylogowano (lokalnie)');
+                loginModal.classList.remove('show');
+            } else { alert(data.message || 'Błąd rejestracji'); }
+        } catch(err){ alert('Błąd połączenia z API'); console.error(err); }
     });
 });
 </script>
